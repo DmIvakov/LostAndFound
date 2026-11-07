@@ -375,6 +375,10 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
+        ###
+        self.tblReports.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Zguba — szkolny system rzeczy znalezionych"))
