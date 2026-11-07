@@ -1,5 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from src.manager import Manager
+from src.report import Report
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -378,6 +381,38 @@ class Ui_MainWindow(object):
 
         ###
         self.tblReports.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.deDate.setDate(QtCore.QDate.currentDate())
+        self.btnAdd.clicked.connect(self.onAddClicked)
+
+        self.manager = Manager()
+
+    def getFields(self):
+        fields = {
+            "type" : self.cmbType.currentText(),
+            "category" : self.cmbCategory.currentText(),
+            "color": self.txtColor.text().strip().lower(),
+            "place": self.txtPlace.text().strip().lower(),
+            "date" : self.deDate.text()
+        }
+        return fields
+
+    def checkFieildsNotEmpty(self) -> bool:
+        fields = self.getFields()
+        
+        for field, value in fields.items():
+            if not value.strip():
+                self.lblMessage.setText("Wszystkie pola muszą być wypełnione!")
+                return False
+        return True
+
+    def onAddClicked(self):
+        if not self.checkFieildsNotEmpty():
+            return
+        
+        fields = self.getFields()
+
+        report = self.manager.createAndAddReport(**self.getFields())
+        self.lblMessage.setText(f"Zgłoszenie {report.id} zostało dodane!")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
