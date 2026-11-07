@@ -5,15 +5,19 @@ from report import Report
 class Manager:
     def __init__(self):
         self._reports: list[Report] = []
+        self.loadReports()
 
     def addReport(self, report):
         self._reports.append(report)
+        self.saveReports()
 
     def removeReport(self, report):
         self._reports.remove(report)
+        self.saveReports()
 
     def clearReports(self):
         self._reports.clear()
+        self.saveReports()
 
     def loadReports(self):
         with open("reports.json", "r", encoding="utf-8") as file:
