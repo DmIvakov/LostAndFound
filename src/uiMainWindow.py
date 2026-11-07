@@ -390,8 +390,8 @@ class Ui_MainWindow(object):
         fields = {
             "type" : self.cmbType.currentText(),
             "category" : self.cmbCategory.currentText(),
-            "color": self.txtColor.text().strip().lower(),
-            "place": self.txtPlace.text().strip().lower(),
+            "color": self.txtColor.text().strip().capitalize(),
+            "place": self.txtPlace.text().strip().capitalize(),
             "date" : self.deDate.text()
         }
         return fields

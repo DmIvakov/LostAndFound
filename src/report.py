@@ -1,7 +1,7 @@
 class Report:
     lastId = 0
 
-    def __init__(self, type, category, color, place, date, id=None, status="lost"):
+    def __init__(self, type, category, color, place, date, id=None, status="Zgubiono"):
         if id is not None:
             self.__id = id
         else:
@@ -29,8 +29,8 @@ class Report:
 
     @status.setter
     def status(self, value: str):
-        if value not in ["lost", "found", "solved"]:
-            raise ValueError("Status must be 'lost', 'found' or 'solved'")
+        if value not in ["Zgubiono", "Znaleziono", "Rozwiazane"]:
+            raise ValueError("Status must be 'Zgubiono', 'Znaleziono' or 'Rozwiazane'")
         self.__status = value
 
     # --- TYPE ---

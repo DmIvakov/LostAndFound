@@ -54,4 +54,4 @@ class Manager:
                 }
                 for report in self._reports
             ]
-            json.dump(raw_reports, file, indent=4, sort_keys=True, ensure_ascii=False)
+            json.dump(raw_reports, file, indent=4, sort_keys=False, ensure_ascii=False)
