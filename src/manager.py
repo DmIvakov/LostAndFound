@@ -1,11 +1,23 @@
 import json
+from PyQt5.QtCore import QObject, pyqtSignal
 
 from src.report import Report
 
-class Manager:
+class Manager(QObject):
+    reportsSaved = pyqtSignal()
+    reportsLoaded = pyqtSignal()
+
     def __init__(self):
+        super().__init__()
         self._reports: list[Report] = []
         self.loadReports()
+
+    @property
+    def reports(self) -> list[Report]:
+        return self._reports
+    
+    def getReportsCount(self) -> int:
+        return len(self._reports)
 
     def createReport(self, **fields) -> Report:
         return Report(**fields)
@@ -36,6 +48,8 @@ class Manager:
                 
                 if self._reports:
                     Report.lastId = max(r.id for r in self._reports)
+
+            self.reportsLoaded.emit()
                     
         except (FileNotFoundError, json.JSONDecodeError):
             self._reports = []
@@ -54,4 +68,7 @@ class Manager:
                 }
                 for report in self._reports
             ]
+            raw_reports.sort(key=lambda x: x["id"])
             json.dump(raw_reports, file, indent=4, sort_keys=False, ensure_ascii=False)
+
+        self.reportsSaved.emit()

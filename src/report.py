@@ -15,7 +15,18 @@ class Report:
         self.color = color
         self.place = place
         self.date = date
-
+        
+    @property
+    def asList(self) -> list[str]:
+        return [
+            str(self.id),
+            self.type,
+            self.category,
+            self.color,
+            self.place,
+            self.date,
+            self.status
+        ]
 
     # --- ID ---
     @property
@@ -29,8 +40,8 @@ class Report:
 
     @status.setter
     def status(self, value: str):
-        if value not in ["Zgubiono", "Znaleziono", "Rozwiazane"]:
-            raise ValueError("Status must be 'Zgubiono', 'Znaleziono' or 'Rozwiazane'")
+        if value not in ["Otwarte", "Rozwiazane"]:
+            raise ValueError("Status must be 'Otwarte' or 'Rozwiazane'")
         self.__status = value
 
     # --- TYPE ---
@@ -40,6 +51,8 @@ class Report:
 
     @type.setter
     def type(self, value: str):
+        if value not in ["Zgubiono", "Znaleziono"]:
+            raise ValueError("Status must be 'Zgubiono' or 'Znaleziono'")
         self.__type = value
 
     # --- CATEGORY ---

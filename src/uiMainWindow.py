@@ -380,13 +380,53 @@ class Ui_MainWindow(object):
 
 
         ###
-        self.tblReports.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        # self.tblReports.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        
+        header = self.tblReports.horizontalHeader()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.ResizeToContents) # ID
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.ResizeToContents) # Typ
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Stretch) # Kategoria
+        header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.ResizeToContents) # Kolor
+        header.setSectionResizeMode(4, QtWidgets.QHeaderView.ResizeMode.Stretch) # Miejsce
+        header.setSectionResizeMode(5, QtWidgets.QHeaderView.ResizeMode.ResizeToContents) # Data
+        header.setSectionResizeMode(6, QtWidgets.QHeaderView.ResizeMode.ResizeToContents) # Status
+        
+        self.tblReports.setSortingEnabled(True) 
+
+
         self.deDate.setDate(QtCore.QDate.currentDate())
+
         self.btnAdd.clicked.connect(self.onAddClicked)
 
         self.manager = Manager()
+        self.manager.reportsLoaded.connect(self.updateTblReports)
+        self.manager.reportsSaved.connect(self.updateTblReports)
+        self.updateTblReports()
 
-    def getFields(self):
+
+    ### methods for updating repots table
+    def initializeTableItem(self, text="") -> QtWidgets.QTableWidgetItem:
+        item = QtWidgets.QTableWidgetItem(text)
+        item.setFont(QtGui.QFont("Arial", 14))
+        item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        return item
+
+    def updateTblReports(self):
+        self.tblReports.setRowCount(self.manager.getReportsCount())
+
+        reportsSorted = sorted(self.manager.reports, key=lambda r: r.id)
+
+        for row, report in enumerate(reportsSorted):
+            for col, text in enumerate(report.asList):
+                item = self.initializeTableItem(text)
+                if col == 0:
+                    item.setData(QtCore.Qt.ItemDataRole.EditRole, int(text))
+
+                self.tblReports.setItem(row, col, item)        
+    ### 
+     
+    ### methods for adding reports
+    def getFields(self) -> dict[str:str]:
         fields = {
             "type" : self.cmbType.currentText(),
             "category" : self.cmbCategory.currentText(),
@@ -413,6 +453,7 @@ class Ui_MainWindow(object):
 
         report = self.manager.createAndAddReport(**self.getFields())
         self.lblMessage.setText(f"Zgłoszenie {report.id} zostało dodane!")
+    ###
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
