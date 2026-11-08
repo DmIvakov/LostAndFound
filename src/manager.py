@@ -2,6 +2,7 @@ import json
 from PyQt5.QtCore import QObject, pyqtSignal
 
 from src.report import Report
+from src.matcher import Matcher
 
 class Manager(QObject):
     reportsSaved = pyqtSignal()
@@ -10,14 +11,32 @@ class Manager(QObject):
     def __init__(self):
         super().__init__()
         self._reports: list[Report] = []
+        self._filtered: list[Report] = []
         self.loadReports()
 
     @property
     def reports(self) -> list[Report]:
         return self._reports
+
+    @property
+    def filtered(self) -> list[Report]:
+        return self._filtered
     
-    def getReportsCount(self) -> int:
-        return len(self._reports)
+    @filtered.setter
+    def filtered(self, value: list[Report]):
+        if not isinstance(value, list):
+            raise ValueError("Must be a list!")
+            
+        if not all(isinstance(item, Report) for item in value):
+            raise ValueError("All items in the list must be Report instances!")
+            
+        self._reports = value
+
+    def clearFiltered(self):
+        return self._filtered.clear()
+
+    # def getReportsCount(self) -> int:
+    #     return len(self._reports)
 
     def createReport(self, **fields) -> Report:
         return Report(**fields)

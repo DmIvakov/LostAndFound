@@ -399,12 +399,22 @@ class Ui_MainWindow(object):
         self.btnAdd.clicked.connect(self.onAddClicked)
         self.btnFilter.clicked.connect(self.onFilterClicked)
         self.btnFilterReset.clicked.connect(self.onFilterResetClicked)
+        self.btnMatch.clicked.connect(self.onMatchClicked)
+        self.btnSubmit.clicked.connect(self.onSubmitClicked)
 
         self.manager = Manager()
         self.manager.reportsLoaded.connect(self.updateTblReports)
         self.manager.reportsSaved.connect(self.updateTblReports)
         self.updateTblReports()
 
+
+    ### methods for matching
+    def onMatchedClicked(self):
+        self.manager.matchReports()
+
+    def onSubmitClicked(self):
+        pass
+    ###
 
     ### methods for filters
     def onFilterClicked(self):
@@ -429,12 +439,16 @@ class Ui_MainWindow(object):
         self.updateTblReports(filtered)
         self.lblMessage.setText(f"Znaleziono zgłoszeń: {len(filtered)}")
 
+        self.manager.filtered = filtered
+
     def onFilterResetClicked(self):
         self.cmbFilterCategory.setCurrentIndex(0)
         self.cmbFilterStatus.setCurrentIndex(0)
         self.cmbFilterType.setCurrentIndex(0)
         self.lblMessage.setText("Komunikat:\n")
         self.updateTblReports()
+
+        self.manager.filtered.clear()
     ###
 
     ### methods for updating repots table
