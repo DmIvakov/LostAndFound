@@ -259,6 +259,7 @@ class Ui_MainWindow(object):
         self.cmbFilterCategory.addItem("")
         self.cmbFilterCategory.addItem("")
         self.cmbFilterCategory.addItem("")
+        self.cmbFilterCategory.addItem("")
         self.formLayoutFilter.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.cmbFilterCategory)
         self.lblFilterStatus = QtWidgets.QLabel(self.formLayoutWidget_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
@@ -393,10 +394,11 @@ class Ui_MainWindow(object):
         
         self.tblReports.setSortingEnabled(True) 
 
-
         self.deDate.setDate(QtCore.QDate.currentDate())
 
         self.btnAdd.clicked.connect(self.onAddClicked)
+        self.btnFilter.clicked.connect(self.onFilterClicked)
+        self.btnFilterReset.clicked.connect(self.onFilterResetClicked)
 
         self.manager = Manager()
         self.manager.reportsLoaded.connect(self.updateTblReports)
@@ -404,25 +406,66 @@ class Ui_MainWindow(object):
         self.updateTblReports()
 
 
+    ### methods for filters
+    def onFilterClicked(self):
+        targets = {
+            "type" : self.cmbFilterType.currentText(),
+            "category" : self.cmbFilterCategory.currentText(),
+            "status" : self.cmbFilterStatus.currentText()
+        }
+
+        filtered = []
+        for report in self.manager.reports:
+            matched = True
+
+            for key, value in targets.items():
+                if value != "Wszystkie" and value!= getattr(report, key):
+                    matched = False
+                    break
+
+            if matched:
+                filtered.append(report)
+
+        self.updateTblReports(filtered)
+        self.lblMessage.setText(f"Znaleziono zgłoszeń: {len(filtered)}")
+
+    def onFilterResetClicked(self):
+        self.cmbFilterCategory.setCurrentIndex(0)
+        self.cmbFilterStatus.setCurrentIndex(0)
+        self.cmbFilterType.setCurrentIndex(0)
+        self.lblMessage.setText("Komunikat:\n")
+        self.updateTblReports()
+    ###
+
     ### methods for updating repots table
-    def initializeTableItem(self, text="") -> QtWidgets.QTableWidgetItem:
-        item = QtWidgets.QTableWidgetItem(text)
+    def initializeTableItem(self, value="") -> QtWidgets.QTableWidgetItem:
+        item = QtWidgets.QTableWidgetItem()
+        item.setData(QtCore.Qt.ItemDataRole.DisplayRole, value)
         item.setFont(QtGui.QFont("Arial", 14))
         item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         return item
 
-    def updateTblReports(self):
-        self.tblReports.setRowCount(self.manager.getReportsCount())
+    def updateTblReports(self, filtered=None):
+        self.tblReports.setSortingEnabled(False)
+        self.tblReports.setRowCount(0)
 
-        reportsSorted = sorted(self.manager.reports, key=lambda r: r.id)
+        if filtered is not None:
+            reports = filtered
+        else:
+            reports = self.manager.reports
 
-        for row, report in enumerate(reportsSorted):
+        reports = sorted(reports, key=lambda r: r.id)
+        
+        self.tblReports.setRowCount(len(reports))
+
+        for row, report in enumerate(reports):
             for col, text in enumerate(report.asList):
-                item = self.initializeTableItem(text)
-                if col == 0:
-                    item.setData(QtCore.Qt.ItemDataRole.EditRole, int(text))
+                value = int(text) if col == 0 else text
+                item = self.initializeTableItem(value)
+                self.tblReports.setItem(row, col, item)    
 
-                self.tblReports.setItem(row, col, item)        
+        
+        self.tblReports.setSortingEnabled(True)    
     ### 
      
     ### methods for adding reports
@@ -479,12 +522,13 @@ class Ui_MainWindow(object):
         self.cmbFilterType.setItemText(1, _translate("MainWindow", "Zgubiono"))
         self.cmbFilterType.setItemText(2, _translate("MainWindow", "Znaleziono"))
         self.lblFilterCategory.setText(_translate("MainWindow", "Kategoria:"))
-        self.cmbFilterCategory.setItemText(0, _translate("MainWindow", "Elektronika"))
-        self.cmbFilterCategory.setItemText(1, _translate("MainWindow", "Klucze"))
-        self.cmbFilterCategory.setItemText(2, _translate("MainWindow", "Odzież"))
-        self.cmbFilterCategory.setItemText(3, _translate("MainWindow", "Dokumenty"))
-        self.cmbFilterCategory.setItemText(4, _translate("MainWindow", "Przybory szkolne"))
-        self.cmbFilterCategory.setItemText(5, _translate("MainWindow", "Inne"))
+        self.cmbFilterCategory.setItemText(0, _translate("MainWindow", "Wszystkie"))
+        self.cmbFilterCategory.setItemText(1, _translate("MainWindow", "Elektronika"))
+        self.cmbFilterCategory.setItemText(2, _translate("MainWindow", "Klucze"))
+        self.cmbFilterCategory.setItemText(3, _translate("MainWindow", "Odzież"))
+        self.cmbFilterCategory.setItemText(4, _translate("MainWindow", "Dokumenty"))
+        self.cmbFilterCategory.setItemText(5, _translate("MainWindow", "Przybory szkolne"))
+        self.cmbFilterCategory.setItemText(6, _translate("MainWindow", "Inne"))
         self.lblFilterStatus.setText(_translate("MainWindow", "Status:"))
         self.cmbFilterStatus.setItemText(0, _translate("MainWindow", "Wszystkie"))
         self.cmbFilterStatus.setItemText(1, _translate("MainWindow", "Otwarte"))
