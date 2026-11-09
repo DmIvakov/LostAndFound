@@ -426,7 +426,7 @@ class Ui_MainWindow(object):
 
             self.lstMatches.clear()
             for report in topMatches:
-                infoStr = f"ID: {report.asList} | {report.asList} | {report.asList} | {report.asList}"
+                infoStr = f"ID: {", ".join(map(str, report.asList))}"
                 self.lstMatches.addItem(infoStr)
                 
             self.lblMatchMessage.setText(f"Znaleziono\n{len(topMatches)} dopasowań.")
