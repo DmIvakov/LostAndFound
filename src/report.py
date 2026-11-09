@@ -3,7 +3,7 @@ class Report:
 
     def __init__(self, type, category, color, place, date, id=None, status="Zgubiono"):
         if id is not None:
-            self.__id = id
+            self.__id = int(id)
         else:
             Report.lastId += 1
             self.__id = Report.lastId
