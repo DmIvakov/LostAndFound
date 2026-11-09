@@ -19,7 +19,7 @@ class Report:
     @property
     def asList(self) -> list[str]:
         return [
-            str(self.id),
+            self.id,
             self.type,
             self.category,
             self.color,

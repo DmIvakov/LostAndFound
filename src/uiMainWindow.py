@@ -495,8 +495,7 @@ class Ui_MainWindow(object):
         self.tblReports.setRowCount(len(reports))
 
         for row, report in enumerate(reports):
-            for col, text in enumerate(report.asList):
-                value = int(text) if col == 0 else text
+            for col, value in enumerate(report.asList):
                 item = self.initializeTableItem(value)
                 self.tblReports.setItem(row, col, item)    
 

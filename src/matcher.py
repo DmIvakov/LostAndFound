@@ -51,7 +51,7 @@ class Matcher:
         for currentReport in filtered:
             matchedResults = []
             
-            currentId = int(currentReport.asList[0])
+            currentId = currentReport.asList[0]
             currentType = cls.getCleanText(currentReport.asList[1])
             currentCategory = cls.getCleanText(currentReport.asList[2])
 
