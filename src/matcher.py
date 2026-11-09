@@ -45,38 +45,42 @@ class Matcher:
         return points
 
     @classmethod
-    def match(cls, reports, reportToMatch) -> dict:
-        reportsMatched = []
+    def match(cls, reports, filtered) -> dict:
+        allMatches = {}
 
-        for report in reports:
-            rList = report.asList
+        for currentReport in filtered:
+            matchedResults = []
             
-            if report == reportToMatch: # itself
-                continue
+            currentId = currentReport.asList[0]
+            currentType = cls.getCleanText(currentReport.asList[1])
+            currentCategory = cls.getCleanText(currentReport.asList[2])
 
-            if cls.getCleanText(rList[6]) != "Otwarte":
-                # must be o
-                continue
+            for report in reports:
+                rList = report.asList
+                
+                if rList[0] == currentId:
+                    continue
 
-            if cls.getCleanText(rList[1]) == cls.getCleanText(report.asList[1]):
-                # type - must be diff
-                continue
+                if cls.getCleanText(rList[6]) != "Otwarte":
+                    continue
 
-            if cls.getCleanText(rList[2]) != cls.getCleanText(report.asList[2]):
-                # category - must be same
-                continue
+                if cls.getCleanText(rList[1]) == currentType:
+                    continue
 
-            points = cls.calculatePoints(currentReport, report)
+                if cls.getCleanText(rList[2]) != currentCategory:
+                    continue
 
-            if points >= 5:
-                matchedResults.append((points, report))
+                points = cls.calculatePoints(currentReport, report)
 
-        matchedResults.sort(key=lambda x: x[0], reverse=True)
+                if points >= 5:
+                    matchedResults.append((points, report))
 
-        topThree = [report for points, report in matchedResults[:3]]
-        
-        if topThree:
-            allMatches[currentId] = topThree
+            matchedResults.sort(key=lambda x: x[0], reverse=True)
+
+            topThree = [report for points, report in matchedResults[:3]]
+            
+            if topThree:
+                allMatches[currentId] = topThree
 
         return allMatches
 

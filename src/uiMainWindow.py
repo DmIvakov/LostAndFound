@@ -417,7 +417,7 @@ class Ui_MainWindow(object):
 
         reportId = int(self.tblReports.item(selectedRow, 0).text())
 
-        allMatches = self.manager.matchReports(reportId)
+        allMatches = self.manager.matchReports()
 
         if reportId in allMatches:
             topMatches = allMatches[reportId]              

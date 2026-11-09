@@ -92,5 +92,5 @@ class Manager(QObject):
 
         self.reportsSaved.emit()
 
-    def matchReports(self, idReportToMatch: int) -> dict:
-        return Matcher.match(self._reports, self._reports[idReportToMatch])
+    def matchReports(self) -> dict:
+        return Matcher.match(self._reports, self._filtered)
