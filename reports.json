@@ -10,7 +10,7 @@
   },
   {
     "id": 24,
-    "status": "Rozwiazane",
+    "status": "Rozwiązane",
     "type": "Zgubiono",
     "category": "Dokumenty",
     "color": "Brązowy",
@@ -73,7 +73,7 @@
   },
   {
     "id": 22,
-    "status": "Rozwiazane",
+    "status": "Rozwiązane",
     "type": "Zgubiono",
     "category": "Klucze",
     "color": "Srebrny",
@@ -100,7 +100,7 @@
   },
   {
     "id": 25,
-    "status": "Rozwiazane",
+    "status": "Rozwiązane",
     "type": "Znaleziono",
     "category": "Elektronika",
     "color": "Czarny",
@@ -145,7 +145,7 @@
   },
   {
     "id": 23,
-    "status": "Rozwiazane",
+    "status": "Rozwiązane",
     "type": "Znaleziono",
     "category": "Torby i plecaki",
     "color": "Czarny",
@@ -199,7 +199,7 @@
   },
   {
     "id": 26,
-    "status": "Rozwiazane",
+    "status": "Rozwiązane",
     "type": "Zgubiono",
     "category": "Zwierzęta",
     "color": "Szary",

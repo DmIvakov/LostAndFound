@@ -3,3 +3,4 @@
 __pycache__
 etc/*
 !etc/layout.ui
+!etc/reports.json.backup

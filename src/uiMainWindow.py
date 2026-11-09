@@ -344,9 +344,9 @@ class Ui_MainWindow(object):
         self.lstMatches = QtWidgets.QListWidget(self.tabMatch)
         self.lstMatches.setGeometry(QtCore.QRect(10, 350, 681, 161))
         self.lstMatches.setObjectName("lstMatches")
-        self.btnSubmit = QtWidgets.QPushButton(self.tabMatch)
-        self.btnSubmit.setGeometry(QtCore.QRect(700, 400, 181, 41))
-        self.btnSubmit.setObjectName("btnSubmit")
+        self.btnConfirm = QtWidgets.QPushButton(self.tabMatch)
+        self.btnConfirm.setGeometry(QtCore.QRect(700, 400, 181, 41))
+        self.btnConfirm.setObjectName("btnConfirm")
         self.lblMatchMessage = QtWidgets.QLabel(self.tabMatch)
         self.lblMatchMessage.setGeometry(QtCore.QRect(706, 450, 171, 61))
         font = QtGui.QFont()
@@ -400,42 +400,43 @@ class Ui_MainWindow(object):
         self.btnFilter.clicked.connect(self.onFilterClicked)
         self.btnFilterReset.clicked.connect(self.onFilterResetClicked)
         self.btnMatch.clicked.connect(self.onMatchClicked)
-        self.btnSubmit.clicked.connect(self.onSubmitClicked)
+        self.btnConfirm.clicked.connect(self.onConfirmClicked)
 
         self.manager = Manager()
         self.manager.reportsLoaded.connect(self.updateTblReports)
         self.manager.reportsSaved.connect(self.updateTblReports)
+        self.manager.reportsMatched.connect(self.addLstMatchesItem)
+        self.manager.reportsMatchedError.connect(self.handleMatchError)
         self.updateTblReports()
 
 
     ### methods for matching
+    def addLstMatchesItem(self, infoStr):
+        self.lstMatches.addItem(infoStr)
+
+    def handleMatchError(self, err):
+        self.lstMatches.clear()
+        self.lblMatchMessage.setText(err)        
+
     def onMatchClicked(self):
         selectedRow = self.tblReports.currentRow()
         if selectedRow == -1:
             self.lblMatchMessage.setText("Wybierz zgłoszenie\nz tabeli!")
             return
 
+        self.lstMatches.clear()
+
         reportId = int(self.tblReports.item(selectedRow, 0).text())
-
-        allMatches = self.manager.matchReports()
-
-        if reportId in allMatches:
-            topMatches = allMatches[reportId]              
-            self.activeReport = next((r for r in self.manager._filtered if r.asList == reportId), None)
-            self.displayedMatches = topMatches
-
+        result: int = self.manager.matchReports(reportId)
+        if result:
+            self.lblMatchMessage.setText(f"Znaleziono\n{result} dopasowań.")
+        
+    def onConfirmClicked(self):
+        if self.manager.confirmActive(self.lstMatches.currentRow()):
+            self.lblMatchMessage.setText(f"Zgłoszenia zostały\nrozwiązane.")
             self.lstMatches.clear()
-            for report in topMatches:
-                infoStr = f"ID: {", ".join(map(str, report.asList))}"
-                self.lstMatches.addItem(infoStr)
-                
-            self.lblMatchMessage.setText(f"Znaleziono\n{len(topMatches)} dopasowań.")
         else:
-            self.lstMatches.clear()
-            self.lblMatchMessage.setText("Brak dopasowań\nspełniających kryteria\n(min. 5 pkt).")
-
-    def onSubmitClicked(self):
-        pass
+            self.lblMatchMessage.setText(f"Wybierz zgłoszenie z listy.")
     ###
 
     ### methods for filters
@@ -445,6 +446,7 @@ class Ui_MainWindow(object):
             "category" : self.cmbFilterCategory.currentText(),
             "status" : self.cmbFilterStatus.currentText()
         }
+
 
         filtered = []
         for report in self.manager.reports:
@@ -470,7 +472,7 @@ class Ui_MainWindow(object):
         self.lblMatchMessage.setText("Komunikat:\n")
         self.updateTblReports()
 
-        self.manager.clearFiltered()
+        self.manager.reset()
     ###
 
     ### methods for updating repots table
@@ -585,7 +587,7 @@ class Ui_MainWindow(object):
         item = self.tblReports.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Status"))
         self.btnMatch.setText(_translate("MainWindow", "Szukaj dopasowań"))
-        self.btnSubmit.setText(_translate("MainWindow", "Zatwierdź zgłoszenie"))
+        self.btnConfirm.setText(_translate("MainWindow", "Zatwierdź zgłoszenie"))
         self.lblMatchMessage.setText(_translate("MainWindow", "Komunikat:\n"
 ""))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabMatch), _translate("MainWindow", "Lista i dopasowania"))

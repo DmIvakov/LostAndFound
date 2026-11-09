@@ -1,0 +1,236 @@
+[
+  {
+    "id": 9,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Elektronika",
+    "color": "Czarny",
+    "place": "Metro",
+    "date": "06.11.2026"
+  },
+  {
+    "id": 24,
+    "status": "Rozwiązane",
+    "type": "Zgubiono",
+    "category": "Dokumenty",
+    "color": "Brązowy",
+    "place": "Urząd Miasta",
+    "date": "02.11.2026"
+  },
+  {
+    "id": 3,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Dokumenty",
+    "color": "Brązowy",
+    "place": "Centrum Handlowe",
+    "date": "06.11.2026"
+  },
+  {
+    "id": 14,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Torby i plecaki",
+    "color": "Szary",
+    "place": "Kawiarnia",
+    "date": "08.11.2026"
+  },
+  {
+    "id": 2,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Elektronika",
+    "color": "Srebrny",
+    "place": "Dworzec Główny",
+    "date": "08.11.2026"
+  },
+  {
+    "id": 18,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Inne",
+    "color": "Żółty",
+    "place": "Plac zabaw",
+    "date": "07.11.2026"
+  },
+  {
+    "id": 1,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Odzież",
+    "color": "Czarna",
+    "place": "Stare miasto",
+    "date": "07.11.2026"
+  },
+  {
+    "id": 11,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Inne",
+    "color": "Zielony",
+    "place": "Siłownia",
+    "date": "03.11.2026"
+  },
+  {
+    "id": 22,
+    "status": "Rozwiązane",
+    "type": "Zgubiono",
+    "category": "Klucze",
+    "color": "Srebrny",
+    "place": "Apteka",
+    "date": "04.11.2026"
+  },
+  {
+    "id": 15,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Biżuteria",
+    "color": "Złoty",
+    "place": "Teatr",
+    "date": "05.11.2026"
+  },
+  {
+    "id": 7,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Biżuteria",
+    "color": "Srebrny",
+    "place": "Kino",
+    "date": "04.11.2026"
+  },
+  {
+    "id": 25,
+    "status": "Rozwiązane",
+    "type": "Znaleziono",
+    "category": "Elektronika",
+    "color": "Czarny",
+    "place": "Tramwaj 24",
+    "date": "05.11.2026"
+  },
+  {
+    "id": 16,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Odzież",
+    "color": "Niebieska",
+    "place": "Bulwary",
+    "date": "06.11.2026"
+  },
+  {
+    "id": 5,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Zwierzęta",
+    "color": "Biało-rudy",
+    "place": "Mokotów",
+    "date": "05.11.2026"
+  },
+  {
+    "id": 20,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Dokumenty",
+    "color": "Niebieski",
+    "place": "Biblioteka",
+    "date": "08.11.2026"
+  },
+  {
+    "id": 10,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Dokumenty",
+    "color": "Czerwony",
+    "place": "Uczelnia",
+    "date": "08.11.2026"
+  },
+  {
+    "id": 23,
+    "status": "Rozwiązane",
+    "type": "Znaleziono",
+    "category": "Torby i plecaki",
+    "color": "Czarny",
+    "place": "Restauracja",
+    "date": "06.11.2026"
+  },
+  {
+    "id": 13,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Zwierzęta",
+    "color": "Czarny",
+    "place": "Wilanów",
+    "date": "02.11.2026"
+  },
+  {
+    "id": 4,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Klucze",
+    "color": "Złoty",
+    "place": "Park Centralny",
+    "date": "07.11.2026"
+  },
+  {
+    "id": 8,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Odzież",
+    "color": "Czerwona",
+    "place": "Restauracja",
+    "date": "07.11.2026"
+  },
+  {
+    "id": 19,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Klucze",
+    "color": "Czarny",
+    "place": "Parking",
+    "date": "04.11.2026"
+  },
+  {
+    "id": 12,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Klucze",
+    "color": "Srebrny",
+    "place": "Sklep spożywczy",
+    "date": "07.11.2026"
+  },
+  {
+    "id": 26,
+    "status": "Rozwiązane",
+    "type": "Zgubiono",
+    "category": "Zwierzęta",
+    "color": "Szary",
+    "place": "Park Szczęśliwicki",
+    "date": "01.11.2026"
+  },
+  {
+    "id": 21,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Torby i plecaki",
+    "color": "Moro",
+    "place": "Las kabacki",
+    "date": "06.11.2026"
+  },
+  {
+    "id": 6,
+    "status": "Otwarte",
+    "type": "Znaleziono",
+    "category": "Torby i plecaki",
+    "color": "Granatowy",
+    "place": "Przystanek autobusowy",
+    "date": "08.11.2026"
+  },
+  {
+    "id": 17,
+    "status": "Otwarte",
+    "type": "Zgubiono",
+    "category": "Elektronika",
+    "color": "Biały",
+    "place": "Lotnisko",
+    "date": "01.11.2026"
+  }
+]

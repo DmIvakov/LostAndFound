@@ -83,12 +83,3 @@ class Matcher:
                 allMatches[currentId] = topThree
 
         return allMatches
-
-    @staticmethod
-    def confirmMatch(report1, report2):
-        """Переводит оба отчета в статус 'rozwiązane'."""
-        # Здесь меняем статус напрямую в объектах, используя индексы или свойства, если они есть
-        # Например, если статус меняется через обновление элемента в asList:
-        # report1.asList[6] = "rozwiązane"
-        # report2.asList[6] = "rozwiązane"
-        pass

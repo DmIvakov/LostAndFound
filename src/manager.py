@@ -7,16 +7,44 @@ from src.matcher import Matcher
 class Manager(QObject):
     reportsSaved = pyqtSignal()
     reportsLoaded = pyqtSignal()
+    reportsMatched = pyqtSignal(str)
+    reportsMatchedError = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
         self._reports: list[Report] = []
         self.loadReports()
         self._filtered: list[Report] = self._reports
+        self._active: Report = None
+        self._matches: list[Report] = []
 
     @property
     def reports(self) -> list[Report]:
         return self._reports
+    
+    @property
+    def active(self) -> Report:
+        return self._active
+    
+    @active.setter
+    def active(self, value: Report):
+        if not isinstance(value, Report):
+            raise ValueError("Must be a Report instance!")
+        self._active = Report
+
+    @property
+    def matches(self) -> list[Report]:
+        return self._matches
+    
+    @matches.setter
+    def matches(self, value: list[Report]):
+        if not isinstance(value, list):
+            raise ValueError("Must be a list!")
+            
+        if not all(isinstance(item, Report) for item in value):
+            raise ValueError("All items in the list must be Report instances!")
+            
+        self._matches = value
 
     @property
     def filtered(self) -> list[Report]:
@@ -32,11 +60,10 @@ class Manager(QObject):
             
         self._filtered = value
 
-    def clearFiltered(self):
+    def reset(self):
         self._filtered = self._reports
-
-    # def getReportsCount(self) -> int:
-    #     return len(self._reports)
+        self._matches = []
+        self._active = None
 
     def createReport(self, **fields) -> Report:
         return Report(**fields)
@@ -92,5 +119,29 @@ class Manager(QObject):
 
         self.reportsSaved.emit()
 
-    def matchReports(self) -> dict:
-        return Matcher.match(self._reports, self._filtered)
+    def matchReports(self, reportId) -> int:
+        allMatches: dict[int:list[Report]] = Matcher.match(self._reports, self._filtered)
+
+        if reportId in allMatches:
+            topMatches = allMatches[reportId]              
+            self._active = next((r for r in self._filtered if r.asList[0] == reportId), None) 
+            self._matches = topMatches
+
+            for report in topMatches:
+                infoStr = f"ID: {", ".join(map(str, report.asList))}"
+                self.reportsMatched.emit(infoStr)
+
+        else:
+            err = "Brak dopasowań\nspełniających kryteria\n(min. 5 pkt)."
+            self.reportsMatchedError.emit(err)
+            return 0
+        
+        return len(topMatches)
+    
+    def confirmActive(self, reportId) -> bool:
+        if self._active != None and reportId >= 0 and reportId < len(self._matches):
+            self._active.status = "Rozwiązane"
+            self._matches[reportId].status = "Rozwiązane"
+            self.saveReports()
+            return True
+        return False

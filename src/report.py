@@ -17,7 +17,7 @@ class Report:
         self.date = date
         
     @property
-    def asList(self) -> list[str]:
+    def asList(self) -> list:
         return [
             self.id,
             self.type,
@@ -40,8 +40,8 @@ class Report:
 
     @status.setter
     def status(self, value: str):
-        if value not in ["Otwarte", "Rozwiazane"]:
-            raise ValueError("Status must be 'Otwarte' or 'Rozwiazane'")
+        if value not in ["Otwarte", "Rozwiązane"]:
+            raise ValueError("Status must be 'Otwarte' or 'Rozwiązane'")
         self.__status = value
 
     # --- TYPE ---
