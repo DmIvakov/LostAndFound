@@ -1,13 +1,90 @@
+from datetime import datetime
+
 from src.report import Report
 
 class Matcher:
-    @classmethod
+    @staticmethod
     def getCleanText(text) -> str:
-        return text.strip().lower()
+        if text is None:
+            return ""
+        return " ".join(str(text).lower().split())
     
     @classmethod
     def calculatePoints(cls, report1, report2) -> int:
+        # using list of Report's intstance fields
+        # we're looking for the fields from 2 to 5 (inclusive)
+        ###############################
+        # index |   field    | points #
+        # ------|------------|------- #
+        #   2   | 'category' |   3    #
+        #   3   |  'color'   |   2    #
+        #   4   |  'place'   |   1    #
+        #   5   |  'date'    |   2    #
+        ###############################
+        # dates match if diff(date1, date1) <= 7 days
+     
+        scoringMap = {2: 3, 3: 2, 4: 1}
         points = 0
 
-        print(report1.asList[2:5])
-        print(report2.asList[2:5])
+        r1List = report1.asList
+        r2List = report2.asList
+
+        for i in range(2, 5): 
+            if cls.getCleanText(r1List[i]) == cls.getCleanText(r2List[i]):
+                points += scoringMap[i]
+
+        try:
+            date1 = datetime.strptime(str(r1List[5]).strip(), "%d.%m.%Y")
+            date2 = datetime.strptime(str(r2List[5]).strip(), "%d.%m.%Y")
+            delta_days = abs((date1 - date2).days)
+            if delta_days <= 7:
+                points += 2
+        except (ValueError, TypeError):
+            pass  
+    
+        return points
+
+    @classmethod
+    def match(cls, reports, reportToMatch) -> dict:
+        reportsMatched = []
+
+        for report in reports:
+            rList = report.asList
+            
+            if report == reportToMatch: # itself
+                continue
+
+            if cls.getCleanText(rList[6]) != "Otwarte":
+                # must be o
+                continue
+
+            if cls.getCleanText(rList[1]) == cls.getCleanText(report.asList[1]):
+                # type - must be diff
+                continue
+
+            if cls.getCleanText(rList[2]) != cls.getCleanText(report.asList[2]):
+                # category - must be same
+                continue
+
+            points = cls.calculatePoints(currentReport, report)
+
+            if points >= 5:
+                matchedResults.append((points, report))
+
+        matchedResults.sort(key=lambda x: x[0], reverse=True)
+
+        topThree = [report for points, report in matchedResults[:3]]
+        
+        if topThree:
+            allMatches[currentId] = topThree
+
+        return allMatches
+
+    @staticmethod
+    def confirmMatch(report1, report2):
+        """Переводит оба отчета в статус 'rozwiązane'."""
+        # Здесь меняем статус напрямую в объектах, используя индексы или свойства, если они есть
+        # Например, если статус меняется через обновление элемента в asList:
+        # report1.asList[6] = "rozwiązane"
+        # report2.asList[6] = "rozwiązane"
+        pass

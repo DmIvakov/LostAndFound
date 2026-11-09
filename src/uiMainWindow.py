@@ -341,9 +341,9 @@ class Ui_MainWindow(object):
         self.btnMatch = QtWidgets.QPushButton(self.tabMatch)
         self.btnMatch.setGeometry(QtCore.QRect(700, 350, 181, 41))
         self.btnMatch.setObjectName("btnMatch")
-        self.listMatches = QtWidgets.QListWidget(self.tabMatch)
-        self.listMatches.setGeometry(QtCore.QRect(10, 350, 681, 161))
-        self.listMatches.setObjectName("listMatches")
+        self.lstMatches = QtWidgets.QListWidget(self.tabMatch)
+        self.lstMatches.setGeometry(QtCore.QRect(10, 350, 681, 161))
+        self.lstMatches.setObjectName("lstMatches")
         self.btnSubmit = QtWidgets.QPushButton(self.tabMatch)
         self.btnSubmit.setGeometry(QtCore.QRect(700, 400, 181, 41))
         self.btnSubmit.setObjectName("btnSubmit")
@@ -409,8 +409,30 @@ class Ui_MainWindow(object):
 
 
     ### methods for matching
-    def onMatchedClicked(self):
-        self.manager.matchReports()
+    def onMatchClicked(self):
+        selectedRow = self.tblReports.currentRow()
+        if selectedRow == -1:
+            self.lblMatchMessage.setText("Wybierz zgłoszenie\nz tabeli!")
+            return
+
+        reportId = int(self.tblReports.item(selectedRow, 0).text())
+
+        allMatches = self.manager.matchReports(reportId)
+
+        if reportId in allMatches:
+            topMatches = allMatches[reportId]              
+            self.activeReport = next((r for r in self.manager._filtered if r.asList == reportId), None)
+            self.displayedMatches = topMatches
+
+            self.lstMatches.clear()
+            for report in topMatches:
+                infoStr = f"ID: {report.asList} | {report.asList} | {report.asList} | {report.asList}"
+                self.lstMatches.addItem(infoStr)
+                
+            self.lblMatchMessage.setText(f"Znaleziono\n{len(topMatches)} dopasowań.")
+        else:
+            self.lstMatches.clear()
+            self.lblMatchMessage.setText("Brak dopasowań\nspełniających kryteria\n(min. 5 pkt).")
 
     def onSubmitClicked(self):
         pass
@@ -429,7 +451,7 @@ class Ui_MainWindow(object):
             matched = True
 
             for key, value in targets.items():
-                if value != "Wszystkie" and value!= getattr(report, key):
+                if value != "Wszystkie" and value != getattr(report, key):
                     matched = False
                     break
 
@@ -437,18 +459,18 @@ class Ui_MainWindow(object):
                 filtered.append(report)
 
         self.updateTblReports(filtered)
-        self.lblMessage.setText(f"Znaleziono zgłoszeń: {len(filtered)}")
-
+        self.lblMatchMessage.setText(f"Znaleziono zgłoszeń: {len(filtered)}")
+    
         self.manager.filtered = filtered
 
     def onFilterResetClicked(self):
         self.cmbFilterCategory.setCurrentIndex(0)
         self.cmbFilterStatus.setCurrentIndex(0)
         self.cmbFilterType.setCurrentIndex(0)
-        self.lblMessage.setText("Komunikat:\n")
+        self.lblMatchMessage.setText("Komunikat:\n")
         self.updateTblReports()
 
-        self.manager.filtered.clear()
+        self.manager.clearFiltered()
     ###
 
     ### methods for updating repots table

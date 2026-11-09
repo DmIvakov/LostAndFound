@@ -11,8 +11,8 @@ class Manager(QObject):
     def __init__(self):
         super().__init__()
         self._reports: list[Report] = []
-        self._filtered: list[Report] = []
         self.loadReports()
+        self._filtered: list[Report] = self._reports
 
     @property
     def reports(self) -> list[Report]:
@@ -30,10 +30,10 @@ class Manager(QObject):
         if not all(isinstance(item, Report) for item in value):
             raise ValueError("All items in the list must be Report instances!")
             
-        self._reports = value
+        self._filtered = value
 
     def clearFiltered(self):
-        return self._filtered.clear()
+        self._filtered = self._reports
 
     # def getReportsCount(self) -> int:
     #     return len(self._reports)
@@ -91,3 +91,6 @@ class Manager(QObject):
             json.dump(raw_reports, file, indent=4, sort_keys=False, ensure_ascii=False)
 
         self.reportsSaved.emit()
+
+    def matchReports(self, idReportToMatch: int) -> dict:
+        return Matcher.match(self._reports, self._reports[idReportToMatch])
