@@ -1,5 +1,5 @@
 .vscode
 .VSCodeCounter
 __pycache__
-etc
+etc/*
 !etc/layout.ui
